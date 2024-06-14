@@ -44,7 +44,7 @@ async def web_scraping_task(update, context):
 
             try:
                 name = animal_names[i]
-                url = f'https://a-z-animals.com/animals/Aardwolf/'
+                url = f'https://a-z-animals.com/animals/{name}/'
                 req = Request(url, headers={'User-Agent': 'Chrome/58.0.3029.110'})
                 webpage = urlopen(req).read()
                 data = BeautifulSoup(webpage, 'html.parser')
@@ -78,7 +78,7 @@ def getAnimalName():
     return properList
 
 async def start(update, context):
-    user = update.user
+    user = update.effective_user
     log_user(user.id, f"User {user.id} started the bot.")
     await update.message.reply_text(
         "Привет! Я бот для работы с API книг New York Times.",
@@ -86,7 +86,7 @@ async def start(update, context):
     )
 
 async def search_book_start(update, context):
-    user = update.user
+    user = update.effective_user
     log_user(user.id, f"User {user.id}: Вводит название книги.")
     await update.message.reply_text("Введите название книги:")
     return SEARCH_BOOK
@@ -102,13 +102,13 @@ async def search_book_response(update, context):
             message = f"{book['title']} by {book['author']}"
         else:
             message = 'Книга не найдена в списке бестселлеров.'
-        user = update.user
+        user = update.effective_user
         log_user(user.id, f"User {user.id}: Ищиет книгу.\n {message}")
         await update.message.reply_text(message)
     return ConversationHandler.END
 
 async def author_info_start(update, context):
-    user = update.user
+    user = update.effective_user
     log_user(user.id, f"User {user.id}: Вводит имя автора.")
     await update.message.reply_text("Введите имя автора:")
     return AUTHOR_INFO
@@ -125,13 +125,13 @@ async def author_info_response(update, context):
                 message += f"{book['title']}\n"
         else:
             message = f'Автор {author} не найден в списке бестселлеров.'
-        user = update.user
+        user = update.effective_user
         log_user(user.id, f"User {user.id}: Ищет информацию об авторе.\n {message}")
         await update.message.reply_text(message)
     return ConversationHandler.END
 
 async def help(update, context):
-    user = update.user
+    user = update.effective_user
     log_user(user.id, f"User {user.id} requested help.")
     await update.message.reply_text(
         "Вот доступные команды:\n/author_info - Выводит книги введенного автора, которые были бестселлерами\n/search_book - Ищет автора по названию книги\n/bestsellers - bla bla\n/help - Объяснение команд")
