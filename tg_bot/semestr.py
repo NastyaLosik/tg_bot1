@@ -29,12 +29,9 @@ def log_user(user_id, message):
 
 async def web_scraping_task(update, context):
     try:
-        # Инициализируем переменную состояния
         if "current_index" not in context.user_data:
             context.user_data["current_index"] = 0
-        # Получаем список имен животных
         animal_names = getAnimalName()
-        # Извлекаем факты о животных, начиная с текущего индекса
         current_index = context.user_data["current_index"]
         end_index = current_index + 3
         for i in range(current_index, end_index):
@@ -57,7 +54,6 @@ async def web_scraping_task(update, context):
                 await update.message.reply_text(f"Ошибка при обработке данных: {e}")
                 continue
 
-        # Обновляем текущий индекс
         context.user_data["current_index"] = end_index
 
     except Exception as e:
